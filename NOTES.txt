@@ -1,6 +1,8 @@
 En base a curso: https://www.youtube.com/watch?v=I4vgw0dcKwo
 *Algunas cosas no se siguieron al pie de la letra por cuestión de que a mi me salian errores y así, y se tuvieron que hacer de manera distinta.
 
+SE ESTARÁN OMITIENDO CIERTAS NOTAS SOBRE PASOS QUE VAYA HACIENDO EL INSTRUCTOR SOBRE ASPECTOS QUE YA SE SABE COMO FUNCIONAN
+
 
 
 
@@ -93,4 +95,74 @@ use Illuminate\Support\ServiceProvider;
 
 
 
+"php artisan make:migration create_blogs_table"
 
+"php artisan make:model Blog"
+
+
+Se usa el modelo app\Models\User.php que ya viene desde la creación del proyecto, agregar:
+"
+//spatie
+use Spatie\Permission\Traits\HasRoles;
+...
+
+use HasFactory, Notifiable, HasRoles;
+"
+
+
+De apartado de "Middleware" en documentación de paquete "Laravel-permission" (https://spatie.be/docs/laravel-permission/v6/basic-usage/middleware) copiar las siguiemntes líneas y pegarlas en bootstrap\app.php dentro de función "->withMiddleware(function (Middleware $middleware) { ... })":
+"
+$middleware->alias([
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+        ]);
+"
+Con eso se configuran los tres modelos a emplear
+
+
+Se agregan unas rutas a web.php, aún no se crean los controllers pero para ir definiendolas de una vez:
+"
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RolController;
+use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\BlogController;
+...
+
+Route::group(['middleware' => ['auth']], function(){
+    Route::resource('roles', RolController::class);
+    Route::resource('usuarios', UsuarioController::class);
+    Route::resource('blogs', BlogController::class);
+});
+"
+*Los controllers se definiran de tipo "resource" (esto definido desde comando con el que se crean) para ya tener toda la parte del CRUD (ya se crean con todos los métodos correspondientes)
+
+
+"php artisan make:controller RolController --resource"
+
+"php artisan make:controller UsuarioController --resource"
+
+"php artisan make:controller BlogController --resource"
+
+"php artisan route:list" (para ver las rutas que se tienen. En este caso se visualizan las generadas a lo respectivo de todos los CRUD debido a las rutas "resource" de algunos controllers)
+
+
+En app\Http\Controllers\RolController.php agregar:
+"
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+...
+
+function __construct()
+    {
+        $this->middleware('permission:ver-rol | crear-rol | editar-rol | borrar-rol', ['only'=>['index']]);
+        $this->middleware('permission:crear-rol', ['only'=>['create', 'store']]);
+        $this->middleware('permission:editar-rol', ['only'=>['edit', 'update']]);
+        $this->middleware('permission:borrar-rol', ['only'=>['destroy']]);
+    }
+
+
+...
+"
+se definen los permisos después del "permission:" y en el arreglo con el "['only'=>[]]" los métodos que podrán ser capaces de emplear aquellos con esos permisos
