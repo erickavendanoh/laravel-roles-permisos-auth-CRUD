@@ -1,0 +1,13 @@
+***Para crear el repositorio con los archivos del proyecto directamente dentro de él en lugar de que quede la carpeta resultante del comando "composer create-project laravel/laravel *nombre*" y dentro de ella los archivos del proyecto:
+-Se crea repositorio en GitHub (en web con opción "New" y todo lo demás)
+-Se crea el proyecto localmente (puede ser en escritorio por ejemplo, para ir a esa ubicación usar "cd .\Desktop\") con comando "composer create-project laravel/laravel dash_roles"
+ -Se corre para ver si todo bien con comando "php artisan serve"
+  *Puede haber detalle con lo de "sqlite", para ello solo cambiar en el .env de "DB_CONNECTION=sqlite" a "DB_CONNECTION=mysql"
+-Se abre terminal en el proyecto y se ejecutan:
+ -"git init" (inicializa Git en el proyecto)
+ -"git add ."
+ -"git commit -m "Initial commit"
+ -"git branch -M main" (se crea, y a su vez se cambia hacia rama "main")
+ -"git remote add origin https://github.com/erickavendanoh/laravel-roles-permisos-auth-CRUD.git" (se añade el repositorio remoto de GitHub como el origen (origin) para el repositorio local)
+ -"git push -u origin main" (ya con el repositorio local configurado correctamente, se sube la rama main al repositorio remoto. La opción -u (o --set-upstream) establece la rama main local para rastrear la rama main en el repositorio remoto. Esto permite en el futuro simplemente usar "git push" sin tener que especificar la rama para subir cambios y así)
+
