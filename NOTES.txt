@@ -11,3 +11,18 @@
  -"git remote add origin https://github.com/erickavendanoh/laravel-roles-permisos-auth-CRUD.git" (se añade el repositorio remoto de GitHub como el origen (origin) para el repositorio local)
  -"git push -u origin main" (ya con el repositorio local configurado correctamente, se sube la rama main al repositorio remoto. La opción -u (o --set-upstream) establece la rama main local para rastrear la rama main en el repositorio remoto. Esto permite en el futuro simplemente usar "git push" sin tener que especificar la rama para subir cambios y así)
 
+
+Ya después para clonarlo en otras partes, o igual para ya borrar el repositorio local y clonarlo y trabajarlo ya directamente del repositorio en GitHub:
+-Borrar el proyecto localmente (esto solo aplica en PC donde se creó el proyecto, si no se omite)
+-Ir al repositorio en GitHub y copiar el link de "HTTPS" que aparece en opción "Code"
+-Ir a la ubicación donde se desea clonar el repositorio, abrir una terminal y ejeuctar " git clone https://github.com/erickavendanoh/laravel-roles-permisos-auth-CRUD.git "
+-Abrir la carpeta resultante en VS Code
+-Crear un archivo ".env" y dentro pegar lo contenido en "env.txt"
+-Abrir una terminal y ejecutar "composer install"
+Listo. Correrlo con comandos necesarios ("php artisan migrate", y otros si es el caso)
+
+
+
+
+
+Se empleara el paquete de SPATIE "Laravel-permission"
