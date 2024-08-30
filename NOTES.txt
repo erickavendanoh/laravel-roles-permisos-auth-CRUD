@@ -1,3 +1,10 @@
+En base a curso: https://www.youtube.com/watch?v=I4vgw0dcKwo
+*Algunas cosas no se siguieron al pie de la letra por cuestión de que a mi me salian errores y así, y se tuvieron que hacer de manera distinta.
+
+
+
+
+
 ***Para crear el repositorio con los archivos del proyecto directamente dentro de él en lugar de que quede la carpeta resultante del comando "composer create-project laravel/laravel *nombre*" y dentro de ella los archivos del proyecto:
 -Se crea repositorio en GitHub (en web con opción "New" y todo lo demás)
 -Se crea el proyecto localmente (puede ser en escritorio por ejemplo, para ir a esa ubicación usar "cd .\Desktop\") con comando "composer create-project laravel/laravel dash_roles"
@@ -25,4 +32,65 @@ Listo. Correrlo con comandos necesarios ("php artisan migrate", y otros si es el
 
 
 
-Se empleara el paquete de SPATIE "Laravel-permission"
+Proyecto que involucra creación de usuarios, roles y permisos, así como un CRUD, en este caso de blogs.
+
+
+
+
+
+Se empleara:
+-Paquete de SPATIE "Laravel-permission" (https://spatie.be/docs/laravel-permission/v6/introduction)
+-Bootstrap. *En curso emplean librerias "Laravel UI Stisla" (que emplea Bootstrap v4.6) para estructura y estilos para el panel de control (https://github.com/InfyOmLabs/laravel-ui-stisla, https://infyom.com/open-source/laravel-ui-stisla/docs), y "Laravel collective" (https://laravelcollective.com/docs/6.x/html) sin embargo estas ya no son soportadas en las nuevas versiones de Laravel.
+
+
+
+El paquete Laravel-permission ya maneja todas las relaciones necesarias entre permisos, roles y usuarios del sistema.
+
+Los roles tienen ciertos permisos (acciones que se pueden hacer en el sistema), y los usuarios pueden tener un rol
+
+
+
+
+
+SPATIE recomienda definir un usuario con los privilegios de "Super-Admin", es decir que ese va a tener todos los privilegios en cuanto a los permisos que se irán definiendo.
+
+
+
+
+
+****Instalación de lo necesario y configuraciones: 
+
+Se crea BD "dash_roles"  (con CHARACTER SET utf8mb4 y COLLATE utf8mb4_spanish_c)
+
+
+
+Se instala paquete "Laravel-permission":
+-" composer require spatie/laravel-permission "
+
+
+Agregar en config\app.php:
+"
+use Illuminate\Support\ServiceProvider;
+...
+
+'providers' => ServiceProvider::defaultProviders()->merge([
+        // Other Service Providers
+        Spatie\Permission\PermissionServiceProvider::class,
+        
+    ])->toArray(),
+"
+
+
+"php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider" (para publicar (agregar al proyecto) los archivos de permission.php y el de la migración que crea las tablas correspondientes a los roles, permisos y aquellas que relacionan toda esa parte)
+
+
+"php artisan optimize:clear"
+
+
+"php artisan migrate"
+
+
+
+
+
+
