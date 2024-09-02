@@ -166,3 +166,7 @@ function __construct()
 ...
 "
 se definen los permisos después del "permission:" y en el arreglo con el "['only'=>[]]" los métodos que podrán ser capaces de emplear aquellos con esos permisos
+
+Se define lo correspondiente al resto de métodos del CRUD en app\Http\Controllers\RolController.php, en algunos con algunos métodos ya de spatie como "->syncPermissions()"
+
+Se crean las vistas relacionadas a CRUD de blogs, roles y usuarios (las de index ya incluirán la parte de crear también)
