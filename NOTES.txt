@@ -201,5 +201,38 @@ Se crean las vistas relacionadas a CRUD de blogs, roles y usuarios (las de index
 
 
 
+Se define la lógica de los métodos en app\Http\Controllers\UsuarioController.php y app\Http\Controllers\BlogController.php.
+
+En app\Http\Controllers\UsuarioController.php:
+"
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Arr;
+...
+"
+
+En app\Http\Controllers\BlogController.php:
+"
+use App\Models\Blog;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+...
+
+public static function middleware(): array
+  {
+      return [
+          new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using(['ver-blog', 'crear-blog', 'editar-blog', 'borrar-blog']), only:['index']),
+          new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('crear-blog'), only:['create', 'store']),
+          new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('editar-blog'), only:['edit', 'update']),
+          new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('borrar-blog'), only:['destroy']),
+      ];
+  }
+"
+Se definen los permisos que debe tener el usuario para poder emplear los respectivos métodos de ese Controller.
+
+
+
 
 
