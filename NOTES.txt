@@ -184,3 +184,10 @@ Como las librerías que empleaba instructor para estructura y vistas no estaban 
 *En archivo resources\views\welcome.blade.php, que es de los que ya se crean por defecto desde la creación de un proyecto de Laravel, viene una validación ("@if (Route::has('login'))") que básicamente controla que lo de dentor de esa validación se muestre si es que en las rutas viene alguna definida con "login", mientras no. En este caso no es hasta que instalé Jetstream (que ya trae incorporada toda esa parte de usuarios, registros e inicios de sesión y así) que aparece esa parte donde se valida eso en el resources\views\welcome.blade.php
 
 Ya con Jetstream además de tener las vistas de registro de usuarios, inicio de sesión e incluso una plantilla, también con la parte de Livewire tendremos los componentes que se generan en resources/views/componentes, así como ya incluso la reactividad en casos donde se pueda aplicar
+
+Se incluyó Boostrap también. Añadiendo en resources\views\layouts\app.blade.php los CDN correspondientes, el de CSS antes del </head> y el de JS antes del </body>
+
+
+
+
+
