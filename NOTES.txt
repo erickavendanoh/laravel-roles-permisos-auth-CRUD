@@ -62,6 +62,20 @@ SPATIE recomienda definir un usuario con los privilegios de "Super-Admin", es de
 
 ****Instalación de lo necesario y configuraciones: 
 
+Como las librerías que empleaba instructor para estructura y vistas no estaban disponbles, se empleará Jetstream, y se incluye también Livewire para lo que pueda servir...
+" composer require laravel/jetstram "
+" php artisan jetstream:install livewire "
+" php artisan migrate:fresh " (recordar que con este comando se borran las tablas generadas hasta el momento, ósea se inicia de 0 la BD de nuevo prácticamente, y se vuelven a correr las migraciones creando nuevamente las tablas correspondientes)
+
+
+*En archivo resources\views\welcome.blade.php, que es de los que ya se crean por defecto desde la creación de un proyecto de Laravel, viene una validación ("@if (Route::has('login'))") que básicamente controla que lo de dentor de esa validación se muestre si es que en las rutas viene alguna definida con "login", mientras no. En este caso no es hasta que instalé Jetstream (que ya trae incorporada toda esa parte de usuarios, registros e inicios de sesión y así) que aparece esa parte donde se valida eso en el resources\views\welcome.blade.php
+
+Ya con Jetstream además de tener las vistas de registro de usuarios, inicio de sesión e incluso una plantilla, también con la parte de Livewire tendremos los componentes que se generan en resources/views/componentes, así como ya incluso la reactividad en casos donde se pueda aplicar
+
+Se incluyó Boostrap también. Añadiendo en resources\views\layouts\app.blade.php los CDN correspondientes, el de CSS antes del </head> y el de JS antes del </body>
+
+
+
 Se crea BD "dash_roles"  (con CHARACTER SET utf8mb4 y COLLATE utf8mb4_spanish_c)
 
 
@@ -106,7 +120,7 @@ Se usa el modelo app\Models\User.php que ya viene desde la creación del proyect
 use Spatie\Permission\Traits\HasRoles;
 ...
 
-use HasFactory, Notifiable, HasRoles;
+use HasRoles;
 "
 
 
@@ -149,43 +163,41 @@ Route::group(['middleware' => ['auth']], function(){
 
 En app\Http\Controllers\RolController.php agregar:
 "
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 ...
 
-function __construct()
+class RolController extends Controller implements HasMiddleware
+
+...
+
+public static function middleware(): array
     {
-        $this->middleware('permission:ver-rol | crear-rol | editar-rol | borrar-rol', ['only'=>['index']]);
-        $this->middleware('permission:crear-rol', ['only'=>['create', 'store']]);
-        $this->middleware('permission:editar-rol', ['only'=>['edit', 'update']]);
-        $this->middleware('permission:borrar-rol', ['only'=>['destroy']]);
+        return [
+            // examples with aliases, pipe-separated names, guards, etc:
+            // 'role_or_permission:manager|edit articles',
+            // new Middleware('role:author', only: ['index']),
+            // new Middleware(\Spatie\Permission\Middleware\RoleMiddleware::using('manager'), except:['show']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using(['ver-rol', 'crear-rol', 'editar-rol', 'borrar-rol']), only:['index']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('crear-rol'), only:['create', 'store']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('editar-rol'), only:['edit', 'update']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('borrar-rol'), only:['destroy']),
+        ];
     }
 
 
 ...
 "
-se definen los permisos después del "permission:" y en el arreglo con el "['only'=>[]]" los métodos que podrán ser capaces de emplear aquellos con esos permisos
+se definen los permisos dentro del "using()" (si hay más de uno se colocan a manera de arreglo) y en el arreglo con el "['only'=>[]]" los métodos que podrán ser capaces de emplear aquellos con esos permisos
 
 Se define lo correspondiente al resto de métodos del CRUD en app\Http\Controllers\RolController.php, en algunos con algunos métodos ya de spatie como "->syncPermissions()"
 
 Se crean las vistas relacionadas a CRUD de blogs, roles y usuarios (las de index ya incluirán la parte de crear también)
 
 
-
-
-
-Como las librerías que empleaba instructor para estructura y vistas no estaban disponbles, se empleará Jetstream, y se incluye también Livewire para lo que pueda servir...
-" composer require laravel/jetstram "
-" php artisan jetstream:install livewire "
-" php artisan migrate:fresh " (recordar que con este comando se borran las tablas generadas hasta el momento, ósea se inicia de 0 la BD de nuevo prácticamente)
-
-
-*En archivo resources\views\welcome.blade.php, que es de los que ya se crean por defecto desde la creación de un proyecto de Laravel, viene una validación ("@if (Route::has('login'))") que básicamente controla que lo de dentor de esa validación se muestre si es que en las rutas viene alguna definida con "login", mientras no. En este caso no es hasta que instalé Jetstream (que ya trae incorporada toda esa parte de usuarios, registros e inicios de sesión y así) que aparece esa parte donde se valida eso en el resources\views\welcome.blade.php
-
-Ya con Jetstream además de tener las vistas de registro de usuarios, inicio de sesión e incluso una plantilla, también con la parte de Livewire tendremos los componentes que se generan en resources/views/componentes, así como ya incluso la reactividad en casos donde se pueda aplicar
-
-Se incluyó Boostrap también. Añadiendo en resources\views\layouts\app.blade.php los CDN correspondientes, el de CSS antes del </head> y el de JS antes del </body>
 
 
 

@@ -4,12 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\DB;
 
-class RolController extends Controller
+class RolController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            // examples with aliases, pipe-separated names, guards, etc:
+            // 'role_or_permission:manager|edit articles',
+            // new Middleware('role:author', only: ['index']),
+            // new Middleware(\Spatie\Permission\Middleware\RoleMiddleware::using('manager'), except:['show']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using(['ver-rol', 'crear-rol', 'editar-rol', 'borrar-rol']), only:['index']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('crear-rol'), only:['create', 'store']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('editar-rol'), only:['edit', 'update']),
+            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('borrar-rol'), only:['destroy']),
+        ];
+    }
+
+    //Forma antigua de definir los permisos
+    /*
     function __construct()
     {
         $this->middleware('permission:ver-rol | crear-rol | editar-rol | borrar-rol', ['only'=>['index']]);
@@ -17,6 +35,7 @@ class RolController extends Controller
         $this->middleware('permission:editar-rol', ['only'=>['edit', 'update']]);
         $this->middleware('permission:borrar-rol', ['only'=>['destroy']]);
     }
+    */
 
     /**
      * Display a listing of the resource.
