@@ -236,3 +236,74 @@ Se definen los permisos que debe tener el usuario para poder emplear los respect
 
 
 
+Para definir un usuario Super-Admin (aquel que tendrá siempre todos los permisos).
+
+En app\Providers\AppServiceProvider.php:
+"
+use Illuminate\Support\Facades\Gate;
+...
+
+public function boot(): void {...
+// Implicitly grant "Super Admin" role all permissions
+        // This works in the app by using gate-related functions like auth()->user->can() and @can()
+        Gate::before(function ($user, $ability) {
+            return $user->email == 'admin@gmail.com' ?? null;
+        });
+"
+Se define el email del usuario que, cuando se cree (en el apartado de Register de Jetstream, en este caso que se está empleando Jetstream), Spatie reconocerá como el que tendrá los permisos correspondientes al rol de Super-Admin ósea todos.
+
+
+
+
+
+Se registrarán en tabla "permissions" los permisos que se han definido al momento, mediante un seeder.
+
+" php artisan make:seeder SeederTablaPermisos "
+
+
+En database\seeders\SeederTablaPermisos.php:
+"
+use Spatie\Permission\Models\Permission;
+...
+
+public function run(): void{...
+$permisos = [
+            //roles
+            'ver-rol', 
+            'crear-rol', 
+            'editar-rol', 
+            'borrar-rol',
+            //blogs
+            'ver-blog', 
+            'crear-blog', 
+            'editar-blog', 
+            'borrar-blog',
+        ];
+
+        foreach($permisos as $permiso)
+        {
+            Permission::create(['name' =>$permiso]);
+        }
+"
+
+
+
+
+
+*Para los iconos se empleó "Font Awesome", que es un conjunto de herramientas de fuentes e íconos basado en CSS y Less. Para poder emplearlo se descarga desde liga: https://fontawesome.com/v4/get-started/ en base a sección "Download & Customize" dando clic en opción "Download"->descomprimir el zip->la carpeta resultante (checar que dentro no haya otra contenida, si es así sería la que está contenida) copiarla y pegarla dentro de carpeta "vendor" (previamente creada dentro de carpeta "public" del proyecto)->luego, en archivo "resources\views\layouts\app.blade.php" hacer referencia al archivo .css con el que se emplean: " <link rel="stylesheet" href="{{ asset('vendor/font-awesome-4.7.0/css/font-awesome.css') }}"> <!--Para iconos de Font Awesome--> " (con función "asset()" se indica que se apunta a carpeta "public" del proyecto, y ya lo que va dentro es lo que sigue de la ruta, como las carpetas y archivos que van dentro y a los que se hará referencia en específico)
+
+
+
+
+
+Sobre resources\views\usuarios\index.blade.php:
+Para obtener los nombres de los roles que tiene un usuario: "$usuario->getRoleNames()"
+
+
+Como se crearon como tipo "resource" los controllers cuando se crearon con sus respectivos comandos, y como están declarados así en el web.php, la forma de pasar parámetros a las rutas cambia un poco. Por ejemplo para la parte de editar de usuarios, cuyo nombre de la ruta es "usuarios.edit", el parámetro no es "id" sino "usuario" y el acomodo es "usuarios/{usuario}/edit", por lo que el href de los botones que dirijan allí sería: " <a class="btn btn-info text-white"  href="{{route('usuarios.edit', ['usuario' => $usuario->id])}}">Editar</a> ". Lo mismo para la eliminación (con destroy)
+
+
+
+
+
+Se emplean las directivas (nativas de Laravel y que se emplean en este caso junto con Laravel-permission) @can('*nombre del permiso*') y @endcan, que permiten validar si el usuario logeado tiene cierto permiso, y ya lo que vaya dentro de esas directivas solo lo podrán visualizar los usuarios que tengan ese permiso (ósea que su rol o roles tengan ese permiso incluido). *Esta es, según la documentación oficial, mejor práctica que usar "->hasRole('*nombre del rol*')". 

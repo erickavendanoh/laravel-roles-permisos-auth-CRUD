@@ -19,12 +19,14 @@
 
         {{--Boostrap--}}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <link rel="stylesheet" href="{{ asset('vendor/font-awesome-4.7.0/css/font-awesome.css') }}"> <!--Para iconos de Font Awesome-->
     </head>
     <body class="font-sans antialiased">
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            <livewire:navigation-menu />
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -45,18 +47,24 @@
                                     <nav id="sidebar">
                                         <div class="shadow-bottom"></div>
                                         <ul class="nav flex-column">
-                                            <li class="nav-item">
+                                            {{-- <li class="nav-item">
                                             <a class="nav-link active" aria-current="page" href="#">Active</a>
+                                            </li> --}}
+                                            <li class="nav-item">
+                                            <a class="nav-link" href="/">Dashboard</a>
                                             </li>
                                             <li class="nav-item">
-                                            <a class="nav-link" href="#">Link</a>
+                                            <a class="nav-link" href="/usuarios"><i class="fa fa-users px-2" aria-hidden="true"></i>Usuarios</a>
                                             </li>
                                             <li class="nav-item">
-                                            <a class="nav-link" href="#">Link</a>
-                                            </li>
-                                            <li class="nav-item">
+                                                <a class="nav-link" href="/roles"><i class="fa fa-lock px-2" aria-hidden="true"></i>Roles</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" href="/blogs"><i class="fa fa-pencil-square-o px-2" aria-hidden="true"></i>Blogs</a>
+                                                    </li>
+                                            {{-- <li class="nav-item">
                                             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                                            </li>
+                                            </li> --}}
                                         </ul>
                                     </nav>
                                 </div>
@@ -65,7 +73,7 @@
                         <div class="col col-md-10">
                             <div class="py-12">
                                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-4">
                                         {{ $slot }}
                                     </div>
                                 </div>
