@@ -67,6 +67,7 @@ class RolController extends Controller implements HasMiddleware
         $role = Role::create([
             'name' => $request->name,
         ]);
+        // Asignar los permisos al rol
         $role->syncPermissions($request->permission);
 
         return redirect()->route('roles.index');
@@ -86,7 +87,7 @@ class RolController extends Controller implements HasMiddleware
     public function edit(string $id)
     {
         $role =  Role::find($id);
-        $Permission = Permission::get();
+        $permission = Permission::get();
         $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $id)
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();

@@ -8,11 +8,9 @@
         <div class="alert alert-dark alert-dismissible fade show" role="alert">
             <strong>¡Revise los campos!</strong>
             @foreach ($errors->all() as $error)
-                <span class="badge badge-danger">{{$error}}</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <span class="badge text-bg-danger">{{$error}}</span>
             @endforeach
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>        
     @endif
 
@@ -27,10 +25,10 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
-                    <label>Permisos para este rol</label>
+                    <label for="permission[]">Permisos para este rol</label>
                     <br/>
                     @foreach ($permission as $value)
-                        <input type="checkbox" id="{{$value->name}}" name="{{$value->name}}" value="{{$value->id}}" class="form-check-input mt-0">
+                        <input type="checkbox" id="{{$value->name}}" name="permission[]" value="{{$value->id}}" class="form-check-input mt-0">
                         <label for="{{$value->name}}">{{$value->name}}</label><br/>
                     @endforeach
                 </div>

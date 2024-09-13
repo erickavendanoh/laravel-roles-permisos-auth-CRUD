@@ -17,10 +17,10 @@
         <tbody>
             @foreach ($roles as $role)
                 <tr>
-                    <td>{{$rol->name}}</td>
+                    <td>{{$role->name}}</td>
                     <td>
                         @can('editar-rol')
-                            <a class="btn btn-info text-white"  href="{{route('usuarios.edit', ['usuario' => $usuario->id])}}">Editar</a>
+                            <a class="btn btn-info text-white"  href="{{route('roles.edit', ['role' => $role->id])}}">Editar</a>
                         @endcan
 
                         @can('borrar-rol')
