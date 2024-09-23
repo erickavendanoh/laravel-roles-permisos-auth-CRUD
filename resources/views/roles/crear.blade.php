@@ -28,7 +28,7 @@
                     <label for="permission[]">Permisos para este rol</label>
                     <br/>
                     @foreach ($permission as $value)
-                        <input type="checkbox" id="{{$value->name}}" name="permission[]" value="{{$value->id}}" class="form-check-input mt-0">
+                        <input type="checkbox" id="{{$value->name}}" name="permission[]" value="{{$value->name}}" class="form-check-input mt-0"> <!--La función syncPermissions() signará los permisos al rol emplenado el nombre de los permisos y no el id, por ello el value de cada <input type="checkbox"> es el nombre de cada permiso y no el id-->
                         <label for="{{$value->name}}">{{$value->name}}</label><br/>
                     @endforeach
                 </div>

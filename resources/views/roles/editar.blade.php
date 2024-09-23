@@ -32,9 +32,9 @@
                     <br/>
                     @foreach ($permission as $value)
                         @if (in_array($value->id, $rolePermissions))
-                            <input type="checkbox" id="{{$value->name}}" name="{{$value->name}}" value="{{$value->id}}" class="form-check-input mt-0" checked>
+                            <input type="checkbox" id="{{$value->name}}" name="permission[]" value="{{$value->name}}" class="form-check-input mt-0" checked>
                         @else
-                            <input type="checkbox" id="{{$value->name}}" name="{{$value->name}}" value="{{$value->id}}" class="form-check-input mt-0">
+                            <input type="checkbox" id="{{$value->name}}" name="permission[]" value="{{$value->name}}" class="form-check-input mt-0">
                         @endif
                         <label for="{{$value->name}}">{{$value->name}}</label><br/>
                     @endforeach

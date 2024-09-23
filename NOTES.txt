@@ -307,3 +307,29 @@ Como se crearon como tipo "resource" los controllers cuando se crearon con sus r
 
 
 Se emplean las directivas (nativas de Laravel y que se emplean en este caso junto con Laravel-permission) @can('*nombre del permiso*') y @endcan, que permiten validar si el usuario logeado tiene cierto permiso, y ya lo que vaya dentro de esas directivas solo lo podrán visualizar los usuarios que tengan ese permiso (ósea que su rol o roles tengan ese permiso incluido). *Esta es, según la documentación oficial, mejor práctica que usar "->hasRole('*nombre del rol*')". 
+
+
+
+
+
+La parte de crear roles y asignarles permisos se hace con lo correspondiente a métodos create(), store(Request $request), edit(string $id), update(Request $request, string $id) en RolController, donde con funciones de Laravel-permission como syncPermissions() (en parte de "$role->syncPermissions($request->permission);") ya se crean los registros correspondientes en tabla "role_has_permissions" donde se relaciona el rol (el cual se repite en columna "role_id") con cada uno de los permisos que tendrá (valor en "columna "permission_id", que será diferente)
+
+La parte de asignar roles a un usuario se hace con lo correspondiente a métodos create(), store(Request $request), edit(string $id), update(Request $request, string $id) en UsuarioController, donde con funciones de Laravel-permission como assignRole() (en parte de "$user->assignRole($request->roles);") ya se crean los registros correspondientes en tabla "model_has_roles" donde se relaciona el usuario (cuyo id corresponderá al mismo valor en columna "model_id", el cual se repite) con cada uno de los roles que podría tener (valor en "columna "permission_id", que será diferente)
+
+
+
+
+
+Para obtener la cantidad de usuarios que hay (se empleo en resources\views\dashboard.blade.php):
+"
+@php
+                        $cant_usuarios = \App\Models\User::count();
+                    @endphp
+                    <h2 class="text-left"><i class="fa fa-users f-left"></i><span>{{$cant_usuarios}}</span></h2>
+"
+Lo mismo fue para roles (acá se usa "Spatie\Permission\Models\Role" porque ese modelo es propio de Spatie) y blogs.
+
+
+
+
+

@@ -90,7 +90,7 @@ class RolController extends Controller implements HasMiddleware
         $permission = Permission::get();
         $rolePermissions = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $id)
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
-            ->all();
+            ->all(); //Se obtienen los permisos que tiene el rol en cuestión, en una colección clave-valor cuya clave será el id del permiso (campo "permission_id" en tabla "role_has_permissions") y cuyo valor también será ese id
         return view('roles.editar', compact('role', 'permission', 'rolePermissions'));
     }
 

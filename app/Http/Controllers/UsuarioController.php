@@ -78,7 +78,7 @@ class UsuarioController extends Controller
         //En la validación de password se quita que sea required por casos en que se esté en usuario de administrador modificando otro usuario y cambiándole otras cuestiones que no sean la contraseña
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email'.$id,
+            'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
             'roles' => 'required'
         ]);

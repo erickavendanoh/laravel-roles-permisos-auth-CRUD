@@ -8,11 +8,9 @@
         <div class="alert alert-dark alert-dismissible fade show" role="alert">
             <strong>¡Revise los campos!</strong>
             @foreach ($errors->all() as $error)
-                <span class="badge badge-danger">{{$error}}</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <span class="badge text-bg-danger">{{$error}}</span>
             @endforeach
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>        
     @endif
 
@@ -23,36 +21,37 @@
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
                     <label for="name">Nombre</label>
-                    <input type="text" id="name" class="form-control" value="{{$user->name}}"/>
+                    <input type="text" id="name" name="name" class="form-control" value="{{$user->name}}"/>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
                     <label for="email">E-mail</label>
-                    <input type="text" id="email" class="form-control" value="{{$user->email}}"/>
+                    <input type="text" id="email" name="email" class="form-control" value="{{$user->email}}"/>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" class="form-control" />
+                    <input type="password" id="password" name="password" class="form-control" />
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
                     <label for="confirm-password">Confirmar Password</label>
-                    <input type="password" id="confirm-password" class="form-control" />
+                    <input type="password" id="confirm-password" name="confirm-password" class="form-control" />
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2">
                 <div class="form-group">
                     <label for="roles">Roles</label>
                     <select id="roles" name="roles[]" class="form-control" multiple="multiple">
-                        @foreach ($userRole as $userRolIndex => $userRol)
-                            <option value={{$userRolIndex}} selected>{{$userRol}}</option>
-                        @endforeach
                         @foreach ($roles as $rolIndex => $rol)
-                            <option value={{$rolIndex}}>{{$rol}}</option>
+                            @if(in_array($rolIndex, $userRole))
+                                <option value={{$rolIndex}} selected>{{$rol}}</option>
+                            @else
+                                <option value={{$rolIndex}}>{{$rol}}</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
