@@ -333,3 +333,70 @@ Lo mismo fue para roles (acá se usa "Spatie\Permission\Models\Role" porque ese 
 
 
 
+Para los casos donde salía mensaje "403 | User does not have the right permissions." que era cuando con el usuario logueado se intentaba entrar a algún apartado donde en cuyo controller en el "public static function middleware(): array{ return [ ... ] }" no vinieran incluidos los permisos de ese usuario o que simplemente no los tenga (como al principio con usuarios con rol Editor que querian entrar a "Roles" donde en RolController venían puros permisos relacionados a operaciones sobre los roles, que eran solo para usuarios administrador)
+
+
+
+
+
+Otra forma de crear un usuario Super-Admin:
+Esta forma es para casos en los que no se tenga un paquete como Jetstream por ejemplo el cuál ya viene con la parte de inicios de sesión y registro de usuarios, y ya se entra registrando uno e iniciando sesión con ese y así. O para cuando directamente incluso antes de entrar al sistema ya se quiera tener ese usuario Super-Admin.
+SE DEBE HACER ANTES DE CREAR ROLES
+
+" php artisan make:seeder SuperAdminSeeder "
+
+
+database\seeders\SuperAdminSeeder.php:
+"
+<?php
+
+namespace Database\Seeders;
+
+use Hash;
+use Illuminate\Database\Seeder;
+use App\Models\User;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
+class SuperAdminSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        $usuario = User::create([
+            'name' => 'Jose Lopez',
+            'email' => 'jlopez@gmail.com',
+            'password' => Hash::make('12345678')
+        ]);
+
+        $rol = Role::create(['name' => 'Administrador']);
+
+        $permisos = Permission::pluck('id', 'id')->all();
+
+        $rol->syncPermissions($permisos);
+
+        $usuario->assignRole([$rol->id]);
+    }
+}
+"
+
+ojo: si ya se tienen roles y permisos y todo eso, y se desea definir un usuario Super-Admin con esta forma, solo sería comentar las líneas:
+"
+//$rol = Role::create(['name' => 'Administrador']);
+
+//$permisos = Permission::pluck('id', 'id')->all();
+
+//$rol->syncPermissions($permisos);
+"
+Y cambiar la última a: " $usuario->assignRole('Administrador'); " (partiendo de que ya se creó previamente un rol "Administrador" que cuenta con todos los permisos)
+
+
+De cualquiera de las dos formas se ejecuta el seeder: " php artisan db:seed --class=SuperAdminSeeder "
+
+
+
+
+
+La funcionalidad relacionada a las funciones como syncPermissions() o assignRole() se encuentran en vendor\spatie\laravel-permission\src\Traits\ y dentro están archivos como HasPermissions.php y HasRoles.php, donde viene la definición de esas funciones y todo lo relacionado para su funcionalidad.
