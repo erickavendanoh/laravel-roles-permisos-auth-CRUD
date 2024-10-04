@@ -19,6 +19,7 @@ SE ESTARÁN OMITIENDO CIERTAS NOTAS SOBRE PASOS QUE VAYA HACIENDO EL INSTRUCTOR 
  -"git branch -M main" (se crea, y a su vez se cambia hacia rama "main")
  -"git remote add origin https://github.com/erickavendanoh/laravel-roles-permisos-auth-CRUD.git" (se añade el repositorio remoto de GitHub como el origen (origin) para el repositorio local)
  -"git push -u origin main" (ya con el repositorio local configurado correctamente, se sube la rama main al repositorio remoto. La opción -u (o --set-upstream) establece la rama main local para rastrear la rama main en el repositorio remoto. Esto permite en el futuro simplemente usar "git push" sin tener que especificar la rama para subir cambios y así)
+*NOTA: EN LUGAR DE "main" TAMBIÉN PUEDE SER "master" QUE SUELE SER MÁS COMÚN.
 
 
 Ya después para clonarlo en otras partes, o igual para ya borrar el repositorio local y clonarlo y trabajarlo ya directamente del repositorio en GitHub:
